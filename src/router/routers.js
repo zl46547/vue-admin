@@ -99,6 +99,26 @@ export default [
     ]
   },
   {
+    path: '/fund',
+    name: 'fund',
+    meta: {
+      icon: 'logo-buffer',
+      title: '基金'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'index_fund_page',
+        name: 'index_fund_page',
+        meta: {
+          icon: 'md-trending-up',
+          title: '指数基金'
+        },
+        component: () => import('@/view/fund/indexFund/index.vue')
+      }
+    ]
+  },
+  {
     path: '/components',
     name: 'components',
     meta: {
