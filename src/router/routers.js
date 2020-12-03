@@ -96,6 +96,15 @@ export default [
           title: '指数基金'
         },
         component: () => import('@/view/fund/indexFund/index.vue')
+      },
+      {
+        path: 'index_temperature_page',
+        name: 'index_temperature_page',
+        meta: {
+          icon: 'ios-thermometer-outline',
+          title: '指数温度'
+        },
+        component: () => import('@/view/fund/indexTemperature/index.vue')
       }
     ]
   },

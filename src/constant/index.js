@@ -1677,6 +1677,150 @@ export const CODE_LIST = [
     'source': 'cni',
     'name': '国证芯片',
     'launchDate': '2019-08-15T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'us',
+    'market': 'us',
+    'source': 'usi',
+    'name': '标普500',
+    'launchDate': '1957-03-04T05:00:00.000Z',
+    'stockCode': '.INX'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSAHP',
+    'source': 'hsi',
+    'name': '恒生沪深港通AH股溢价指数',
+    'launchDate': '2007-07-08T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSCAIT',
+    'source': 'hsi',
+    'name': '恒生A股行业龙头指数',
+    'launchDate': '2009-09-20T16:00:00.000Z'
+  },
+  {
+    'stockCode': 'HSCEI',
+    'areaCode': 'hk',
+    'source': 'hsi',
+    'market': 'h',
+    'name': '恒生中国企业指数',
+    'launchDate': '1994-08-07T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSCESI',
+    'source': 'hsi',
+    'name': '恒生中国企业精明指数',
+    'launchDate': '2015-06-07T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSHDYI',
+    'source': 'hsi',
+    'name': '恒生高股息率指数',
+    'launchDate': '2012-12-09T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSHK35',
+    'source': 'hsi',
+    'name': '恒生香港35',
+    'launchDate': '2003-01-19T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSHYLV',
+    'source': 'hsi',
+    'name': '恒生港股通高股息低波动指数',
+    'launchDate': '2017-05-07T16:00:00.000Z'
+  },
+  {
+    'stockCode': 'HSI',
+    'areaCode': 'hk',
+    'source': 'hsi',
+    'market': 'h',
+    'name': '恒生指数',
+    'launchDate': '1989-03-08T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSIII',
+    'source': 'hsi',
+    'name': '恒生互联网科技业指数',
+    'launchDate': '2020-07-19T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSLI',
+    'source': 'hsi',
+    'name': '恒生综合大型股指数',
+    'launchDate': '2001-10-02T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSLMI',
+    'source': 'hsi',
+    'name': '恒生综合大中型股指数',
+    'launchDate': '2015-06-07T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSMI',
+    'source': 'hsi',
+    'name': '恒生综合中型股指数',
+    'launchDate': '2001-10-02T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSML25',
+    'source': 'hsi',
+    'name': '恒生中国(香港上市)25指数',
+    'launchDate': '2003-01-19T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSMSI',
+    'source': 'hsi',
+    'name': '恒生综合中小型股指数',
+    'launchDate': '2015-06-07T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSSCNE',
+    'source': 'hsi',
+    'name': '恒生港股通新经济指数',
+    'launchDate': '2018-01-07T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSSI',
+    'source': 'hsi',
+    'name': '恒生综合小型股指数',
+    'launchDate': '2001-10-02T16:00:00.000Z'
+  },
+  {
+    'areaCode': 'hk',
+    'market': 'h',
+    'stockCode': 'HSTECH',
+    'source': 'hsi',
+    'name': '恒生科技指数',
+    'launchDate': '2020-06-30T16:00:00.000Z'
   }
 ]
 

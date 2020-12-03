@@ -7,9 +7,9 @@
           :label-width="120"
     >
       <FormItem label="股票代码：" prop="stockCodes">
-        <Input type="text" v-model="searchParams.stockCodes" placeholder="股票代码">
-          <span slot="append" v-if="getText">{{getText}}</span>
-        </Input>
+        <Select v-model="searchParams.stockCodes" filterable placeholder="股票代码"  style="width:200px">
+          <Option v-for="item in codeList" :value="item.stockCode" :key="item.stockCode">{{ item.name }} / ({{item.stockCode}})</Option>
+        </Select>
       </FormItem>
       <FormItem label="时间范围：">
         <DatePicker v-model="searchParams.dateRange"
@@ -37,18 +37,18 @@
           <Option value="median">中位数</Option>
         </Select>
       </FormItem>
-      <FormItem label="历史记录：">
-        <template v-if="historyStockCodes.length>0">
-          <div v-for="item in historyStockCodes"
+      <FormItem label="我的收藏：">
+        <template v-if="favoriteStockCodes.length>0">
+          <div v-for="item in favoriteStockCodes"
                :key="item.stockCode"
-               class="history-stock-codes"
+               class="favorite-stock-codes"
                @click="searchParams.stockCodes = item.stockCode"
           >
             {{item.name}}
             <Icon type="md-close" @click.stop="handleDelete(item.stockCode)" />
           </div>
         </template>
-        <span v-else>暂无历史记录</span>
+        <span v-else>暂无收藏记录</span>
       </FormItem>
       <FormItem label="参数名称：">
         <CheckboxGroup v-model="searchParams.metricsName">
@@ -60,9 +60,11 @@
             >{{item.label}}</Checkbox>
         </CheckboxGroup>
       </FormItem>
-      <FormItem>
+      <Row>
+        <Button type="primary" @click="saveFavoriteStockCode" class="btn">收藏</Button>
+        <Button type="primary" @click="saveNotFavoriteStockCode" class="btn">设为黑名单</Button>
         <Button type="primary" @click="handleSubmit('formInline')">查询</Button>
-      </FormItem>
+      </Row>
     </Form>
 
     <Bar
@@ -86,8 +88,9 @@ export default {
   data () {
     return {
       metricsNameList: METRICS_NAME_LIST,
+      codeList: CODE_LIST,
       searchParams: {
-        stockCodes: '000905', // 股票代码数组
+        stockCodes: '', // 股票代码数组
         dateRange: [new Date(dayjs().subtract(10, 'years').format('YYYY-MM-DD')), new Date()], // 时间范围
         metricsName: ['cp', 'pe_ttm', 'pb'],
         granularity: 'y10',
@@ -106,7 +109,8 @@ export default {
         ]
       },
       indexFundData: [],
-      historyStockCodes: []
+      favoriteStockCodes: [],
+      notFavoriteStockCodes: []
     }
   },
   components: {
@@ -118,15 +122,20 @@ export default {
     }
   },
   mounted () {
-    this.historyStockCodes = localRead('STOCK_CODES') ? JSON.parse(localRead('STOCK_CODES')) : []
+    this.favoriteStockCodes = localRead('FAVORITE_STOCK_CODES') ? JSON.parse(localRead('FAVORITE_STOCK_CODES')) : []
+    this.notFavoriteStockCodes = localRead('NOT_FAVORITE_STOCK_CODES') ? JSON.parse(localRead('NOT_FAVORITE_STOCK_CODES')) : []
+    this.searchParams.stockCodes = this.$route.query.stockCode
+    if (this.searchParams.stockCodes) {
+      this.handleSubmit('formInline')
+    }
   },
   methods: {
     ...mapActions([
       'getIndexFund'
     ]),
     handleDelete (stockCode) {
-      this.historyStockCodes = this.historyStockCodes.filter(item => item.stockCode !== stockCode)
-      localSave('STOCK_CODES', JSON.stringify(this.historyStockCodes))
+      this.favoriteStockCodes = this.favoriteStockCodes.filter(item => item.stockCode !== stockCode)
+      localSave('FAVORITE_STOCK_CODES', JSON.stringify(this.favoriteStockCodes))
     },
     onGranularityChange (value) {
       if (value === 'fs') {
@@ -134,18 +143,47 @@ export default {
       }
       this.searchParams.dateRange = [new Date(dayjs().subtract(value.replace('y', ''), 'years').format('YYYY-MM-DD')), new Date()]
     },
+    saveFavoriteStockCode () {
+      let { stockCodes } = this.searchParams
+      // 如果在黑名单中，就从黑名单中移除
+      if (this.notFavoriteStockCodes.findIndex(item => item.stockCode === stockCodes) > -1) {
+        this.notFavoriteStockCodes = this.notFavoriteStockCodes.filter(item => item.stockCode !== stockCodes)
+        localSave('NOT_FAVORITE_STOCK_CODES', JSON.stringify(this.notFavoriteStockCodes))
+      }
+      if (this.favoriteStockCodes.findIndex(item => item.stockCode === stockCodes) < 0) {
+        this.favoriteStockCodes = [
+          CODE_LIST.find(item => item.stockCode === stockCodes),
+          ...this.favoriteStockCodes
+        ]
+        localSave('FAVORITE_STOCK_CODES', JSON.stringify(this.favoriteStockCodes))
+        this.$Message.success('收藏成功！')
+      } else {
+        this.$Message.error('已在收藏列表中！')
+      }
+    },
+    saveNotFavoriteStockCode () {
+      let { stockCodes } = this.searchParams
+      // 如果在收藏列表中，就从收藏列表中移除
+      if (this.favoriteStockCodes.findIndex(item => item.stockCode === stockCodes) > -1) {
+        this.favoriteStockCodes = this.favoriteStockCodes.filter(item => item.stockCode !== stockCodes)
+        localSave('FAVORITE_STOCK_CODES', JSON.stringify(this.favoriteStockCodes))
+      }
+      if (this.notFavoriteStockCodes.findIndex(item => item.stockCode === stockCodes) < 0) {
+        this.notFavoriteStockCodes = [
+          CODE_LIST.find(item => item.stockCode === stockCodes),
+          ...this.notFavoriteStockCodes
+        ]
+        localSave('NOT_FAVORITE_STOCK_CODES', JSON.stringify(this.notFavoriteStockCodes))
+        this.$Message.success('加入黑名单成功！')
+      } else {
+        this.$Message.error('已在黑名单中！')
+      }
+    },
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           try {
             let { stockCodes, metricsName, granularity, metricsType, dateRange } = this.searchParams
-            if (this.historyStockCodes.findIndex(item => item.stockCode === stockCodes) < 0) {
-              this.historyStockCodes = [
-                CODE_LIST.find(item => item.stockCode === stockCodes),
-                ...this.historyStockCodes
-              ]
-              localSave('STOCK_CODES', JSON.stringify(this.historyStockCodes))
-            }
             let metricsList = metricsName.map(item => {
               if (['pe_ttm', 'pb', 'ps_ttm'].includes(item)) {
                 return `${item}.${granularity}.${metricsType}`
@@ -178,8 +216,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.history-stock-codes{
-  width: 80px;
+.favorite-stock-codes{
   padding:2px 5px;
   text-align: center;
   border-radius: 5px;
@@ -189,4 +226,7 @@ export default {
   cursor: pointer;
   margin-bottom: 10px;
 }
+  .btn{
+    margin-right: 10px;
+  }
 </style>
